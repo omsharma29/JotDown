@@ -15,23 +15,31 @@ export default function CreateInput({ onAddTag, availableTags, tags, setTags }: 
 
   return (
     <CreatableReactSelect
-      value={tags.map(tag => {
-        return { label: tag.name, value: tag.id }
-      })}
-      onChange={(tags) => {
-        setTags(tags.map(tag => {
-          return { id: tag.value, name: tag.label }
-        }))
+      value={tags.map(tag => ({
+        label: tag.name,
+        value: tag.id,
+      }))}
+      onChange={(selected) => {
+        if (!selected) {
+          setTags([])
+          return
+        }
+        setTags(
+          selected.map(tag => ({
+            id: tag.value,
+            name: tag.label,
+          }))
+        )
       }}
       onCreateOption={label => {
         const newTag = { id: uuidV4(), name: label }
         onAddTag(newTag)
         setTags(prev => [...prev, newTag])
-        return newTag
       }}
-      options={availableTags?.map((tag) => {
-        return { label: tag.name, value: tag.id }
-      })}
+      options={availableTags?.map(tag => ({
+        label: tag.name,
+        value: tag.id,
+      }))}
 
       isClearable
       required

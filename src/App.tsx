@@ -6,6 +6,7 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
 import ViewNotes from "./pages/ViewNotes";
+import EditNote from "./pages/EditNote";
 
 
 function App() {
@@ -38,7 +39,20 @@ function App() {
       });
     }
 
-
+function updateNotes( id: string , { ...data} : NoteData) {
+  setNotes(prev => {
+    return prev.map(note => {
+      if (note.id === id) {
+        return {
+          ...note,
+          ...data,
+          tagIds: data.tags.map(tag => String(tag.id)) // Ensure tagIds is string[]
+        };
+      }
+      return note;
+    });
+  });
+}
 
   return (
     <Routes>
@@ -46,7 +60,7 @@ function App() {
       <Route path="/new" element={<NewNotes onSubmit={handleSubmitNotes} onAddTag={addTag} availableTags={tags}/>}/>
       <Route path="/:id">
       <Route index element={<ViewNotes availableTags={tags} notes={notesWithTags} setNotes={setNotes} setTags={setTags}/>}/>
-      <Route path="edit" element={<div>Edit Note</div>}/>
+      <Route path="edit" element={<EditNote notes={notesWithTags} onSubmit={updateNotes} onAddTag={addTag} availableTags={tags}/>}/>
       </Route>
       <Route path="*" element={<Navigate  to={'/'}/>}/>
     </Routes>

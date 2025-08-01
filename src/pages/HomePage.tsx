@@ -38,7 +38,6 @@ function HomePage({ availableTags, notes }: NoteProps) {
             <Link to="/new">
             <Button variant="outline" className="text-black">Create</Button>
             </Link>
-            <Button >Edit Note</Button>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 mb-4 justify-between px-10 py-5">

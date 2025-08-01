@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import type { RawIdNote, Tags } from "@/types";
 import {  useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 
 
 type NoteProps = {
@@ -38,8 +38,13 @@ function ViewNotes({ availableTags, notes, setNotes, setTags }: NoteProps) {
                         <div className="top flex justify-between">
                             <div className="title text-4xl font-extrabold">{note.title}</div>
                             <div className="Button flex gap-1.5">
+                                <Link to={`edit`}>
                                 <Button variant="secondary">Edit</Button>
+                                </Link>
                                 <Button onClick={()=> deleteNote(note.id)} className="hover:bg-white hover:text-black">Delete</Button>
+                                <Link to={`/`}>
+                                <Button variant="secondary">back</Button>
+                                </Link>
                             </div>
                         </div>
                         <div className="main">
