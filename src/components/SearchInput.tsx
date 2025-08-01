@@ -57,7 +57,7 @@ export default function CreateInput({  availableTags, tags, setTags }: NoteSubmi
           backgroundColor: "black",
           borderRadius: "0.5rem",
           marginTop: "4px",
-         
+         width: "200px",
           boxShadow:
             "0px 4px 6px -1px rgba(0,0,0,0.1), 0px 2px 4px -2px rgba(0,0,0,0.1)",
           color: "white",

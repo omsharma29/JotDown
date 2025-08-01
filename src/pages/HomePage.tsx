@@ -43,29 +43,32 @@ function HomePage({ availableTags, notes }: NoteProps) {
       </div>
 
       {/* Search section */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-4 justify-between px-4 sm:px-10 py-5">
-        <div className="input1 flex flex-col gap-2 flex-1">
-          <Label>Search Notes</Label>
-          <Input
-            placeholder="Search notes..."
-            className="sm:w-[600px] w-full max-w-full"   // ✅ never exceeds screen
-            value={SearchTitle}
-            onChange={(e) => setSearchTitle(e.target.value)}
-          />
-        </div>
+<div className="flex flex-col sm:flex-row justify-between items-start gap-4 px-4 sm:px-10 lg:px-20 w-full">
+  {/* Search Notes (Left) */}
+  <div className="flex flex-col gap-2 w-full sm:w-auto flex-1">
+    <Label>Search Notes</Label>
+    <Input
+      placeholder="Search notes..."
+      className="w-full sm:w-[300px] md:w-[400px] lg:w-[500px] max-w-full"
+      value={SearchTitle}
+      onChange={(e) => setSearchTitle(e.target.value)}
+    />
+  </div>
 
-        <div className="input2 flex flex-col gap-2 flex-1">
-          <Label>Search by tags</Label>
-          <SearchInput
-            tags={tags}
-            setTags={setTags}
-            availableTags={availableTags}
-          />
-        </div>
-      </div>
+  {/* Search by Tags (Right) */}
+  <div className="flex flex-col gap-2 w-full sm:w-auto flex-1 sm:items-end">
+    <Label>Search by tags</Label>
+    <SearchInput
+      tags={tags}
+      setTags={setTags}
+      availableTags={availableTags}
+    />
+  </div>
+</div>
+
 
       {/* Notes Grid */}
-      <div className="card px-4 sm:px-6 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="card px-4 sm:px-19 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredNotes.map((note: RawIdNote) => (
           <Link to={`/${note.id}`} key={note.id}>
             <Card className="bg-black text-white hover:scale-105 transition-transform duration-300">
