@@ -2,7 +2,7 @@ import SearchInput from "@/components/SearchInput"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type {  RawIdNote,  Tags } from "@/types"
+import type { RawIdNote, Tags } from "@/types"
 import { useMemo, useState } from "react"
 import {
   Card,
@@ -14,9 +14,8 @@ import { Link } from "react-router-dom"
 
 type NoteProps = {
   availableTags?: Tags[];
-  notes: RawIdNote[]; // Adjust type as needed
+  notes: RawIdNote[];
 }
-
 
 function HomePage({ availableTags, notes }: NoteProps) {
   const [tags, setTags] = useState<Tags[]>([])
@@ -24,46 +23,52 @@ function HomePage({ availableTags, notes }: NoteProps) {
 
   const filteredNotes = useMemo(() => {
     return notes.filter(note => {
-      return (SearchTitle === "" || note.title.toLowerCase().includes(SearchTitle.toLowerCase())) &&
+      return (
+        (SearchTitle === "" || note.title.toLowerCase().includes(SearchTitle.toLowerCase())) &&
         (tags.length === 0 || tags.every(tag => note.tagIds.some(noteTagId => noteTagId === tag.id)))
+      )
     })
   }, [SearchTitle, tags, notes])
 
   return (
-    <>
-      <div>
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="font-extrabold text-4xl">Notes</h1>
-          <div>
-            <Link to="/new">
+    <div className="overflow-x-hidden"> {/* ✅ prevent horizontal scroll */}
+      {/* Header */}
+      <div className="flex justify-between mb-6">
+        <h1 className="font-extrabold text-2xl">Notes</h1>
+        <div>
+          <Link to="/new">
             <Button variant="outline" className="text-black">Create</Button>
-            </Link>
-          </div>
+          </Link>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4 mb-4 justify-between px-10 py-5">
-          <div className="input1 flex flex-col gap-2">
-            <Label>Search Notes</Label>
-            <Input
-              placeholder="Search notes..."
-              className="w-[600px]"
-              value={SearchTitle}
-              onChange={(e) => setSearchTitle(e.target.value)}
+      </div>
 
-            />
-          </div>
-          <div className="input2 flex flex-col gap-2">
-            <Label>Search by tags</Label>
-            <SearchInput tags={tags} setTags={setTags} availableTags={availableTags} />
-          </div>
+      {/* Search section */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-4 justify-between px-4 sm:px-10 py-5">
+        <div className="input1 flex flex-col gap-2 flex-1">
+          <Label>Search Notes</Label>
+          <Input
+            placeholder="Search notes..."
+            className="sm:w-[600px] w-full max-w-full"   // ✅ never exceeds screen
+            value={SearchTitle}
+            onChange={(e) => setSearchTitle(e.target.value)}
+          />
         </div>
 
-        
-        <div className="card px-6 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="input2 flex flex-col gap-2 flex-1">
+          <Label>Search by tags</Label>
+          <SearchInput
+            tags={tags}
+            setTags={setTags}
+            availableTags={availableTags}
+          />
+        </div>
+      </div>
 
-
-          {filteredNotes.map((note: RawIdNote) => (
-            <Link to={`/${note.id}`} key={note.id}>
-            <Card key={note.id} className="bg-black text-white hover:scale-105 transition-transform duration-300">
+      {/* Notes Grid */}
+      <div className="card px-4 sm:px-6 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredNotes.map((note: RawIdNote) => (
+          <Link to={`/${note.id}`} key={note.id}>
+            <Card className="bg-black text-white hover:scale-105 transition-transform duration-300">
               <CardHeader>
                 <CardTitle>{note.title}</CardTitle>
               </CardHeader>
@@ -71,20 +76,20 @@ function HomePage({ availableTags, notes }: NoteProps) {
                 {note.tagIds.map((tagId) => {
                   const tag = availableTags?.find(t => t.id === tagId)
                   return tag ? (
-                    <span key={tag.id} className="bg-gray-700 text-white px-2 py-1 rounded ">
+                    <span
+                      key={tag.id}
+                      className="bg-gray-700 text-white px-2 py-1 rounded"
+                    >
                       {tag.name}
                     </span>
-                  ) : ""
+                  ) : null
                 })}
               </CardFooter>
             </Card>
-            </Link>
-          ))}
-
-        </div>
-
+          </Link>
+        ))}
       </div>
-    </>
+    </div>
   )
 }
 

@@ -35,7 +35,7 @@ function ViewNotes({ availableTags, notes, setNotes, setTags }: NoteProps) {
             <div className="page">
                 {showNotes.map(note => (
                     <div className="flex flex-col gap-6" key={note.id}>
-                        <div className="top flex justify-between">
+                        <div className="top flex sm:justify-between flex-col-reverse sm:flex-row gap-4  ">
                             <div className="title text-4xl font-extrabold">{note.title}</div>
                             <div className="Button flex gap-1.5">
                                 <Link to={`edit`}>

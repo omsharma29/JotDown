@@ -41,7 +41,7 @@ export default function CreateInput({  availableTags, tags, setTags }: NoteSubmi
           color: "white",
           borderColor: state.isFocused ? "#444445" : "none",
           borderWidth: "1px",
-          width: "400px",
+          width: "200px",
           borderRadius: "0.5rem",
 
           padding: "2px 6px",
