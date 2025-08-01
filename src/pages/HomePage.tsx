@@ -2,22 +2,32 @@ import SearchInput from "@/components/SearchInput"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { Tags } from "@/types"
-import { useState } from "react"
+import type {  RawIdNote,  Tags } from "@/types"
+import { useMemo, useState } from "react"
 import {
   Card,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Link } from "react-router-dom"
 
 type NoteProps = {
   availableTags?: Tags[];
+  notes: RawIdNote[]; // Adjust type as needed
 }
 
-function HomePage({ availableTags }: NoteProps) {
+
+function HomePage({ availableTags, notes }: NoteProps) {
   const [tags, setTags] = useState<Tags[]>([])
   const [SearchTitle, setSearchTitle] = useState("")
+
+  const filteredNotes = useMemo(() => {
+    return notes.filter(note => {
+      return (SearchTitle === "" || note.title.toLowerCase().includes(SearchTitle.toLowerCase())) &&
+        (tags.length === 0 || tags.every(tag => note.tagIds.some(noteTagId => noteTagId === tag.id)))
+    })
+  }, [SearchTitle, tags, notes])
 
   return (
     <>
@@ -25,7 +35,9 @@ function HomePage({ availableTags }: NoteProps) {
         <div className="flex justify-between items-center mb-6">
           <h1 className="font-extrabold text-4xl">Notes</h1>
           <div>
+            <Link to="/new">
             <Button variant="outline" className="text-black">Create</Button>
+            </Link>
             <Button >Edit Note</Button>
           </div>
         </div>
@@ -45,19 +57,31 @@ function HomePage({ availableTags }: NoteProps) {
             <SearchInput tags={tags} setTags={setTags} availableTags={availableTags} />
           </div>
         </div>
+
+        
         <div className="card px-6 py-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="bg-black text-white hover:scale-105 transition-transform duration-300">
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-            </CardHeader>
-            <CardFooter>
-              <p>Tags</p>
-            </CardFooter>
-          </Card>
 
 
+          {filteredNotes.map((note: RawIdNote) => (
+            <Link to={`/${note.id}`} key={note.id}>
+            <Card key={note.id} className="bg-black text-white hover:scale-105 transition-transform duration-300">
+              <CardHeader>
+                <CardTitle>{note.title}</CardTitle>
+              </CardHeader>
+              <CardFooter className="flex flex-wrap gap-3">
+                {note.tagIds.map((tagId) => {
+                  const tag = availableTags?.find(t => t.id === tagId)
+                  return tag ? (
+                    <span key={tag.id} className="bg-gray-700 text-white px-2 py-1 rounded ">
+                      {tag.name}
+                    </span>
+                  ) : ""
+                })}
+              </CardFooter>
+            </Card>
+            </Link>
+          ))}
 
-          {/* Add more cards */}
         </div>
 
       </div>
