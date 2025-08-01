@@ -39,7 +39,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<HomePage/>}/>
+      <Route path="/" element={<HomePage availableTags={tags}/>}/>
       <Route path="/new" element={<NewNotes onSubmit={handleSubmitNotes} onAddTag={addTag} availableTags={tags}/>}/>
       <Route path="/:id">
       <Route index element={<div>Note Details</div>}/>

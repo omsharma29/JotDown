@@ -1,20 +1,19 @@
 import type { Tags } from "@/types"
-import CreatableReactSelect from "react-select/creatable"
-import { v4 as uuidV4 } from "uuid";
+import ReactSelect from "react-select/creatable"
 
 type NoteSubmit = {
-  onAddTag: (tag: Tags) => void;
+ 
   availableTags?: Tags[];
   tags: Tags[];
   setTags: React.Dispatch<React.SetStateAction<Tags[]>>
 }
 
-export default function CreateInput({ onAddTag, availableTags, tags, setTags }: NoteSubmit) {
+export default function CreateInput({  availableTags, tags, setTags }: NoteSubmit) {
 
 
 
   return (
-    <CreatableReactSelect
+    <ReactSelect
       value={tags.map(tag => {
         return { label: tag.name, value: tag.id }
       })}
@@ -23,12 +22,7 @@ export default function CreateInput({ onAddTag, availableTags, tags, setTags }: 
           return { id: tag.value, name: tag.label }
         }))
       }}
-      onCreateOption={label => {
-        const newTag = { id: uuidV4(), name: label }
-        onAddTag(newTag)
-        setTags(prev => [...prev, newTag])
-        return newTag
-      }}
+      
       options={availableTags?.map((tag) => {
         return { label: tag.name, value: tag.id }
       })}
@@ -47,6 +41,7 @@ export default function CreateInput({ onAddTag, availableTags, tags, setTags }: 
           color: "white",
           borderColor: state.isFocused ? "#444445" : "none",
           borderWidth: "1px",
+          width: "400px",
           borderRadius: "0.5rem",
 
           padding: "2px 6px",
@@ -62,6 +57,7 @@ export default function CreateInput({ onAddTag, availableTags, tags, setTags }: 
           backgroundColor: "black",
           borderRadius: "0.5rem",
           marginTop: "4px",
+         
           boxShadow:
             "0px 4px 6px -1px rgba(0,0,0,0.1), 0px 2px 4px -2px rgba(0,0,0,0.1)",
           color: "white",
